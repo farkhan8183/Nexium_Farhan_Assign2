@@ -4,65 +4,66 @@ export const BLOG_DATA = [
     title: "The Future of AI",
     url: "https://example.com/ai-future",
     content: `Artificial intelligence is rapidly transforming every industry. From healthcare to finance, AI applications are becoming ubiquitous. In healthcare, AI helps diagnose diseases faster and more accurately than human doctors. Radiologists are using AI to detect early signs of cancer in medical scans. In finance, algorithms can predict market trends and detect fraudulent transactions. The future will likely see even more integration of AI into daily life. Self-driving cars, smart homes, and personalized education are just the beginning. However, ethical concerns about job displacement and privacy need to be addressed.`,
-    summary: "AI is transforming industries like healthcare and finance, with future applications in autonomous vehicles and smart homes, though ethical concerns remain."
+    summary: "ai is transforming industries like healthcare, and finance with future applications in autonomous vehicles and smart homes , though ethical concerns remain ."
   },
   {
     id: 2,
     title: "Web Development Trends 2023",
     url: "https://example.com/web-dev-trends",
     content: `Modern web development has shifted dramatically in recent years. JavaScript frameworks like React and Next.js dominate frontend development. Serverless architectures and edge computing are changing how we deploy applications. WebAssembly allows near-native performance in browsers, enabling complex applications like video editing and 3D modeling. Accessibility has become a priority, with stricter WCAG compliance requirements. Progressive Web Apps (PWAs) continue to bridge the gap between web and mobile apps. Looking ahead, we expect more AI integration in development tools and the rise of Web3 technologies.`,
-    summary: "Key trends include React/Next.js dominance, serverless architectures, WebAssembly, accessibility focus, and growing PWA adoption."
+    summary: "Key trends include React/Next.js dominance , serverless architectures , Webassembly , accessibility focus , and growing PWA adoption ."
   },
   {
     id: 3,
     title: "Sustainable Technology",
     url: "https://example.com/sustainable-tech",
     content: `The tech industry is facing increasing pressure to reduce its environmental impact. Data centers now consume about 1% of global electricity. Companies are transitioning to renewable energy sources and improving cooling efficiency. Hardware manufacturers are designing more energy-efficient chips and promoting device longevity. Software optimization can significantly reduce energy consumption - a well-optimized website uses up to 80% less energy. The circular economy model is gaining traction, with more recycling and refurbishment programs. Consumers are increasingly favoring eco-conscious tech products, driving innovation in sustainability.`,
-    summary: "Tech companies are adopting renewable energy, efficient hardware, optimized software, and circular economy models to reduce environmental impact."
+    summary: "Tech companies are adopting renewable energy , efficient hardware , optimized software , and circular economy models too reduce environmental impact ."
   }
 ];
 
 export const ENGLISH_TO_URDU = {
-   "AI": "مصنوعی ذہانت",
+  // AI Summary
+  "ai": "مصنوعی ذہانت",
   "is": "ہے",
   "transforming": "تبدیل کر رہی",
-  "industries": "صنعتیں",
+  "industries": "صنعتیں", 
   "like": "جیسے",
   "healthcare": "صحت کی دیکھ بھال",
   "and": "اور",
   "finance": "مالیات",
   "with": "کے ساتھ",
-  "future": "مستقبل",
-  "applications": "استعمالات",
-  "in": "میں",
+  "future": "مستقبل میں ",
+  "applications": "استعمال",
+  "in": " ہوں گے",
   "autonomous": "خود مختار",
   "vehicles": "گاڑیاں",
   "smart": "ہوشمند",
   "homes": "گھر",
   "though": "اگرچہ",
-  "ethical": "اخلاقی",
+  "ethical": "اخلاقی", 
   "concerns": "خدشات",
   "remain": "برقرار ہیں",
 
-  // Web Dev Article Summary
+  // Web Dev Summary
   "key": "اہم",
-  "trends": "رجحانات",
+  "trends": "رجحانات میں",
   "include": "شامل ہیں",
   "React/Next.js": "ری ایکٹ/نیکسٹ جے ایس",
-  "dominance": "غلبہ",
+  "dominance": "کاغلبہ",
   "serverless": "سرور لیس",
   "architectures": "ڈھانچے",
-  "WebAssembly": "ویب اسمبلی",
+  "Webassembly": "ویب اسمبلی",
   "accessibility": "رسائی",
   "focus": "توجہ",
   "growing": "بڑھتا ہوا",
   "PWA": "پروگریسیو ویب ایپ",
-  "adoption": "اختیار",
+  
 
-  // Sustainable Tech Article
+  // Sustainable Tech Summary
   "tech": "ٹیکنالوجی",
   "companies": "کمپنیاں",
-  "are": "ہیں",
+  "are": "ہیں", 
   "adopting": "اختیار کر رہی",
   "renewable": "قابل تجدید",
   "energy": "توانائی",
@@ -73,12 +74,11 @@ export const ENGLISH_TO_URDU = {
   "circular": "سرکلر",
   "economy": "معیشت",
   "models": "ماڈلز",
-  "to": "کو",
-  "reduce": "کم کرنا",
-  "environmental": "ماحولیاتی",
-  "impact": "اثر",
-
-  // Common words
+  "too": "تاکہ ماحولیاتی اثر کا کم کیا جا سکے",
+  "reduce":"-",
+  "environmental":"-",
+  "impact":"-",
+  // Common Words (Single Definitions)
   "the": "",
   "a": "",
   "of": "کا",
@@ -108,17 +108,5 @@ export const ENGLISH_TO_URDU = {
   "so": "تو",
   "if": "اگر",
   "one": "ایک",
-  "its": "اس کا",
-    "finance": "مالیات",
-  "homes": "گھر",
-  "remain": "باقی رہنا",
-  "AI": "مصنوعی ذہانت",
-  "dominance": "غلبہ",
-  "WebAssembly": "ویب اسمبلی",
-  "architectures": "ساختیں",
-  "PWA adoption": "پی ڈبلیو اے کو اپنانا",
-  "energy": "توانائی",
-  "hardware": "ہارڈویئر",
-  "software": "سافٹ ویئر",
-  "impact": "اثر"
+  "its": "اس کا"
 };

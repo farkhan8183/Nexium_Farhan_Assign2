@@ -26,91 +26,104 @@ export default function Home() {
     setResult(null);
     setError(null);
 
-   try {
-  const content = await scrapeBlogText(url);
-  const summary = generateSummary(content);
-  const urdu = translateToUrdu(summary);
+    try {
+      const content = await scrapeBlogText(url);
+      const summary = generateSummary(content);
+      const urdu = translateToUrdu(summary);
 
-  setResult({ content, summary, urdu });
+      setResult({ content, summary, urdu });
 
-  // Save to Supabase
-const { error } = await supabase.from("summaries").insert([
-  { url, summary, urdu }
-]);
+      // Save to Supabase
+      const { error } = await supabase.from("summaries").insert([
+        { url, summary, urdu }
+      ]);
 
-if (error) {
-  console.error("Supabase Insert Error:", error.message);
-} else {
-  console.log("Summary saved to Supabase!");
-}
+      if (error) {
+        console.error("Supabase Insert Error:", error.message);
+      } else {
+        console.log("Summary saved to Supabase!");
+      }
 
-
-} catch (err) {
-  setError(err.message || "Failed to process blog");
-}
-
+      // Save full blog to MongoDB
+      await fetch("/api/saveBlogContent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url, content }),
+      });
+    } catch (err) {
+      setError(err.message || "Failed to process blog");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <main className="container mx-auto py-8 px-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-center">Blog Summarizer</h1>
+    <main className="min-h-screen bg-gradient-to-tr from-gray-900 via-gray-700 to-gray-600 py-10 px-4">
+      <div className="max-w-5xl mx-auto bg-gray-300 rounded-3xl shadow-xl p-10 space-y-10">
+        <h1 className="text-4xl font-extrabold text-center text-indigo-700">
+          AI Blog Summarizer
+        </h1>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center">
+            {error}
+          </div>
+        )}
 
-      <div className="mb-10">
-        <h2 className="text-xl font-semibold mb-4">Select a blog:</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {BLOG_DATA.map(blog => (
-            <BlogCard 
-              key={blog.id}
-              title={blog.title}
-              url={blog.url}
-              onSelect={handleSelectBlog}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Choose a blog:</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {BLOG_DATA.map((blog) => (
+              <BlogCard
+                key={blog.id}
+                title={blog.title}
+                url={blog.url}
+                onSelect={handleSelectBlog}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-gray-50 p-6 rounded-xl shadow-inner">
+          <h2 className="text-xl font-medium text-gray-600 mb-4">Or paste your blog URL:</h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Input
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://example.com/your-blog"
+              className="flex-1 py-2 px-4 rounded-lg"
             />
-          ))}
-        </div>
+            <Button
+              onClick={handleSubmit}
+              disabled={!url || isSubmitting}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-2"
+            >
+              {isSubmitting ? "Summarizing..." : "Summarize"}
+            </Button>
+          </div>
+        </section>
+
+        {result && (
+          <section className="space-y-8">
+            <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-indigo-700 mb-2">📜 Original Blog Content</h3>
+              <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{result.content}</p>
+            </div>
+
+            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-green-700 mb-2">🔍 Summary (English)</h3>
+              <p className="text-gray-800">{result.summary}</p>
+            </div>
+
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg shadow text-right">
+              <h3 className="text-xl font-semibold text-yellow-700 mb-2 text-right">📖 اردو ترجمہ</h3>
+              <p className="text-gray-900 text-lg" dir="rtl">{result.urdu}</p>
+            </div>
+          </section>
+        )}
       </div>
-
-      <div className="mb-8">
-        <div className="flex gap-2">
-          <Input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Enter blog URL"
-            className="flex-1 py-2 px-4"
-          />
-          <Button 
-            onClick={handleSubmit}
-            disabled={!url || isSubmitting}
-            className="px-6"
-          >
-            {isSubmitting ? "Processing..." : "Summarize"}
-          </Button>
-        </div>
-      </div>
-
-      {result && (
-        <div className="space-y-8">
-          <div className="border rounded-lg p-6 bg-white shadow-sm">
-            <h3 className="text-2xl font-semibold mb-4">Original Content</h3>
-            <p className="text-lg leading-relaxed">{result.content}</p>
-          </div>
-
-          <div className="border rounded-lg p-6 bg-white shadow-sm">
-            <h3 className="text-xl font-semibold mb-4">Summary (English)</h3>
-            <p className="text-base">{result.summary}</p>
-          </div>
-
-          <div className="border rounded-lg p-6 bg-white shadow-sm">
-            <h3 className="text-xl font-semibold mb-4">Urdu Translation</h3>
-            <p className="text-base text-right" dir="rtl">{result.urdu}</p>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
