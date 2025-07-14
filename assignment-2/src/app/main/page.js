@@ -4,7 +4,7 @@ import { BLOG_DATA } from "@/lib/constants";
 import { BlogCard } from "./components/BlogCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // !!! added useRef
 import { scrapeBlogText, generateSummary, translateToUrdu } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
@@ -16,6 +16,8 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [isSaved, setIsSaved] = useState(false); // show saved msg after save
   const [recent, setRecent] = useState([]); // last 3 saved summaries
+
+  const summaryRef = useRef(null); // !!! ref to scroll to summary
 
   const handleSelectBlog = (blogUrl) => {
     // when user clicks on blog card
@@ -89,6 +91,11 @@ export default function Home() {
         .limit(3);
       if (data) setRecent(data);
 
+      // !!! scroll to summary after result shows
+      setTimeout(() => {
+        summaryRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+
     } catch (err) {
       setError(err.message || "Failed to process blog");
     } finally {
@@ -97,10 +104,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-950 py-10 px-4">
-      <div className="max-w-5xl mx-auto bg-gradient-to-br from-gray-100 via-gry-300 to-gray-500 rounded-3xl shadow-xl p-6 sm:p-10 space-y-10">
-        <h1 className="text-4xl font-extrabold text-center text-indigo-950">
-          AI Blog Summarizer
+    <main className="min-h-screen bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-600 text-white py-10 px-4">
+      <div className="max-w-5xl mx-auto bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 rounded-3xl shadow-xl p-6 sm:p-10 space-y-10">
+        <h1 className="text-4xl font-bold text-center text-amber-400">
+          AI BLOG SUMMARIZER
         </h1>
 
         {/* show error msg if soomething goes wrong */}
@@ -138,8 +145,8 @@ export default function Home() {
         </section>
 
         {/* manual input section */}
-        <section className="bg-gray-50 p-6 rounded-xl shadow-inner">
-          <h2 className="text-xl font-medium text-gray-600 mb-4">
+        <section className="bg-gray-200 p-6 rounded-xl shadow-inner">
+          <h2 className="text-xl font-medium text-gray-700 mb-4">
             Select any URL from above:
           </h2>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -147,7 +154,7 @@ export default function Home() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/your-blog"
-              className="flex-1 py-2 px-4 rounded-lg"
+              className="flex-1 py-2 px-4 rounded-lg text-black"
             />
             <Button
               onClick={handleSubmit}
@@ -159,9 +166,22 @@ export default function Home() {
           </div>
         </section>
 
+        {/* !!! scroll button shown if result */}
+        {result && (
+        <div className="text-center mt-4">
+  <button
+    onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}
+    className="bg-amber-400 cursor-pointer hover:bg-amber-500 text-black font-bold py-3 px-6 rounded-full shadow-lg animate-bounce transition-all duration-300"
+  >
+    ↓ Jump to Summary
+  </button>
+</div>
+
+        )}
+
         {/* show results if available */}
         {result && (
-          <section className="space-y-8">
+          <section ref={summaryRef} className="space-y-8"> {/* !!! added ref here */}
 
             {/* tell user where data is saved */}
             <div className="bg-white border border-indigo-300 p-4 rounded-lg shadow-sm text-sm text-gray-600 flex justify-between">
@@ -200,7 +220,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">Latest Saved Summaries</h2>
             <ul className="space-y-3">
               {recent.map((r, i) => (
-                <li key={i} className="bg-white p-3 rounded shadow text-sm">
+                <li key={i} className="bg-green-300 p-3 rounded shadow text-sm">
                   <strong>{new URL(r.url).hostname}</strong>: {r.summary}
                 </li>
               ))}
